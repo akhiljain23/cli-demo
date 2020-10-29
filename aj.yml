@@ -1,0 +1,33 @@
+---
+
+- name: play1 dummy
+  hosts: all
+  remote_user: root
+
+  tasks:
+    - name: This is a hello-world example
+      debug:
+        msg: Your are running 'hello-world' example
+    - name: simulate long running op (15 sec), wait for up to 45 sec, poll every 5 sec
+      command: /bin/sleep 3
+      poll: 1
+
+- name: play2
+  hosts: all
+
+  tasks:
+    - name: This is a hello-world example
+      debug:
+        msg: Your are running 'hello-world' example
+    - name: simulate long running op (15 sec), wait for up to 45 sec, poll every 5 sec
+      command: /bin/sleep 3
+      poll: 1
+    - name: Testing notify task
+      debug:
+        msg: Going to notify
+    - name: sleep to enable handler
+      command: /bin/sleep 4
+      notify: notify handler
+  handlers:
+    - name: notify handler
+      debug: msg="msg in handler"

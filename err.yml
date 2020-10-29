@@ -1,0 +1,46 @@
+---
+
+- name: play1 dummy
+  hosts: 127.0.0.1
+  remote_user: root
+
+  tasks:
+    - name: This is a hello-world example
+      debug:
+        msg: Your are running 'hello-world' example
+    - name: simulate long running op (15 sec), wait for up to 45 sec, poll every 5 sec
+      command: /bin/sleep 3
+      poll: 1
+
+- name: play2
+  hosts: localhost
+
+  tasks:
+    - name: This is a hello-world example
+      debug:
+        msg: Your are running 'hello-world' example
+    - name: simulate long running op (15 sec), wait for up to 45 sec, poll every 5 sec
+      command: /bin/sleep 3
+      poll: 1
+    - name: Testing notify task
+      debug:
+        msg: Going to notify
+    - name: sleep to enable handler
+      command: /bin/sleep 4
+      notify: notify handler
+  handlers:
+    - name: notify handler
+      debug: msg="msg in handler"
+
+- name: play3
+  hosts: localhost
+
+  tasks:
+  - name: ensure apache is at the latest version
+    yum:
+      name: httpd
+      state: latest
+  - name: write the apache config file
+    template:
+      src: /srv/httpd.j2
+      dest: /etc/httpd.conf
