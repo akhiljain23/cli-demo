@@ -1,7 +1,7 @@
 ---
 
 - name: play1 dummy
-  hosts: all
+  hosts: localhost
   remote_user: root
 
   tasks:
@@ -13,7 +13,7 @@
       poll: 1
 
 - name: play2
-  hosts: all
+  hosts: localhost
 
   tasks:
     - name: This is a hello-world example
